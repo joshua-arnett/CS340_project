@@ -1,0 +1,97 @@
+{{!-- 
+Citation for the following page:
+Date: 05/06/2025
+Based on:
+Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948 
+--}}
+
+<h1>Customers</h1>
+
+{{! READ table }}
+<table>
+    <thead>
+        {{! For the table header row, we print the DB attribute names }}
+        <tr>
+            {{#each customers.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{! For each row, print the id, name, description, cost, and stock amount }}
+        {{#each customers}}
+        <tr>
+            <td>{{this.customerID}}</td>
+            <td>{{this.customerName}}</td>
+            <td>{{this.customerAddress}}</td>
+            <td>{{this.customerPhone}}</td>
+
+            {{! DELETE form }}
+            <form id='delete_toy_form'>
+                <input type='hidden' name='delete_toy_id' value='{{this.customerID}}' />
+                <input type='hidden' name='delete_toy_name' value='{{this.customerName}}' />
+                <td>
+                    <button type='submit'>
+                        Delete
+                    </button>
+                </td>
+            </form>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{! CREATE form }}
+{{!-- <h2>Create a Toy</h2>
+<form class='cuForm' id='create_toyorder_form'>
+    <label for='create_toy_toyName'>Toy Name: </label>
+    <input type='text' name='create_toy_toyName' id='create_toy_toyName' required />
+
+    <label for='create_toyorder_toyDescription'>Toy Description: </label>
+    <input type='text' name='create_toy_toyDescription' id='create_toy_toyDescription' />
+
+    <label for='create_toyorder_toyCost'>Toy Cost: </label>
+    <input type='number' name='create_toy_toyCost' id='create_toy_toyCost' step="0.01" min="0" max="99999999.99" required />
+
+    <label for='create_toy_toyStockAmount'>Toy Stock Amount: </label>
+    <input type='number' name='create_toy_toyStockAmount' id='create_toy_toyStockAmount' min="0" required />
+
+    <input type='submit' />
+</form> --}}
+
+{{! UPDATE form }}
+{{!-- <h2>Update a Person</h2>
+<form class='cuForm' id='update_person_form'>
+    <label for='update_person_id'>Person to Update: </label>
+    <select name='update_person_id' id='update_person_id' required>
+        <option value='' disabled selected>Select a Person</option>
+        {{#each people}}
+        <option value='{{this.id}}' required>
+            {{this.id}}
+            -
+            {{this.fname}}
+            {{this.lname}}
+        </option>
+        {{/each}}
+    </select> --}}
+
+    {{!-- <label for='update_person_homeworld'>Homeworld: </label>
+    <select name='update_person_homeworld' id='update_person_homeworld'>
+        <option value='NULL' disabled selected>Select a Planet</option>
+        <option value='NULL'>&lt; None &gt;</option>
+        {{#each homeworlds}}
+        <option value='{{this.id}}' required>
+            {{this.name}}
+        </option>
+        {{/each}}
+    </select> --}}
+
+    {{!-- <label for='update_person_age'>Age: </label>
+    <input type='number' name='update_person_age' id='update_person_age' min='0' />
+
+    <input type='submit' />
+</form> --}}
