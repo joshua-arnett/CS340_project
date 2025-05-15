@@ -100,10 +100,14 @@ app.get('/employees', async function (req, res) {
         // In query1, we use select all of the data on the Employees table
         const query1 = 'SELECT * FROM Employees;';
         const [employees] = await db.query(query1);
+        const [departments] = await db.query('SELECT * FROM Departments;');
 
         // Render the toys.hbs file, and also send the renderer
         //  an object that contains our Employees information
-        res.render('employees', { employees: employees });
+        res.render('employees', {
+            employees: employees,
+            departments: departments
+        });
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser
@@ -112,6 +116,7 @@ app.get('/employees', async function (req, res) {
         );
     }
 });
+
 
 app.get('/departments', async function (req, res) {
     try {
@@ -123,6 +128,39 @@ app.get('/departments', async function (req, res) {
         // Render the departments.hbs file, and also send the renderer
         //  an object that contains our Departments information
         res.render('departments', { departments: departments });
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+app.get('/toyorders', async function (req, res) {
+    try {
+        // Create and execute our queries
+        // In query1, we use select all of the data on the Orders table
+        const query1 = `
+        SELECT 
+            ToyOrders.toyOrderID,
+            ToyOrders.toyID,
+            Toys.toyName,
+            ToyOrders.orderID,
+            Orders.orderDate
+        FROM ToyOrders
+        JOIN Toys ON ToyOrders.toyID = Toys.toyID
+        JOIN Orders ON ToyOrders.orderID = Orders.orderID;`;
+        const [toyorders] = await db.query(query1);
+        const [toys] = await db.query('SELECT * FROM Toys;');
+        const [orders] = await db.query('SELECT * FROM Orders;');
+
+        // Render the orders.hbs file, and also send the renderer
+        //  an object that contains our Orders information
+        res.render('toyorders', { toyorders: toyorders,
+                                  toys: toys,
+                                  orders: orders
+         });
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser
