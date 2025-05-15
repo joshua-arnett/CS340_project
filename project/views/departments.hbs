@@ -45,6 +45,31 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
     </tbody>
 </table>
 
+{{! UPDATE form }}
+<h2>Update a Department</h2>
+<form class='cForm' id='update_department_form'>
+    <label for='update_department_id'>Department to Update: </label>
+    <select name='update_department_id' id='update_department_id' required>
+        <option value='' disabled selected>Select a Department</option>
+        {{#each departments}}
+        <option value='{{this.departmentID}}' required>
+            {{this.departmentID}}
+            -
+            {{this.departmentName}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for='update_department_manager'>Manager name: </label>
+    <input type="text" id="update_department_manager" name="update_department_manager" placeholder="Enter manager name here" />
+
+    <label for='update_department_address'>Address: </label>
+    <input type="text" id="update_department_address" name="update_department_address" placeholder="Enter address here" />
+
+
+    <input type='submit' />
+</form>
+
 {{! CREATE form }}
 {{!-- <h2>Create a Toy</h2>
 <form class='cuForm' id='create_toyorder_form'>

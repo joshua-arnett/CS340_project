@@ -45,6 +45,33 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
     </tbody>
 </table>
 
+
+{{! UPDATE form }}
+<h2>Update a Customer</h2>
+<form class='cForm' id='update_customer_form'>
+    <label for='update_customer_id'>Customer to Update: </label>
+    <select name='update_customer_id' id='update_customer_id' required>
+        <option value='' disabled selected>Select a Customer</option>
+        {{#each customers}}
+        <option value='{{this.customerID}}' required>
+            {{this.customerID}}
+            -
+            {{this.customerName}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for='update_customer_address'>Address: </label>
+    <input type="text" id="update_customer_address" name="update_customer_address" placeholder="Enter address here" />
+
+
+    <label for='update_customer_Phone'>Phone: </label>
+    <input type="text" id="update_customer_Phone" name="update_customer_Phone" placeholder="Enter phone here" />
+
+
+    <input type='submit' />
+</form>
+
 {{! CREATE form }}
 {{!-- <h2>Create a Toy</h2>
 <form class='cuForm' id='create_toyorder_form'>

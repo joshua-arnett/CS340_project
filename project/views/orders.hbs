@@ -45,6 +45,29 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
     </tbody>
 </table>
 
+{{! UPDATE form }}
+<h2>Update an Order</h2>
+<form class='cForm' id='update_order_form'>
+    <label for='update_order_id'>Order to Update: </label>
+
+    <label for='update_order_id'>Order: </label>
+    <select name='update_order_id' id='update_order_id' required>
+        <option value='' disabled selected>Select an order</option>
+        {{#each orders}}
+        <option value='{{this.orderID}}'>
+            {{this.orderID}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for='update_orderDate'>Date: </label>
+    <input type="Date" id="update_orderDate" name="update_orderDate"/>
+
+    <label for='update_order_cost'>Cost: </label>
+<input type="number" id="update_order_cost" name="update_order_cost" step="0.01" min="0" />
+
+    <input type='submit' />
+</form>
 {{! CREATE form }}
 {{!-- <h2>Create a Toy</h2>
 <form class='cuForm' id='create_toyorder_form'>
