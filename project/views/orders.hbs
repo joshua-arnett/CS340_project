@@ -1,0 +1,106 @@
+{{!-- 
+Citation for the following page:
+Date: 05/06/2025
+Based on:
+Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948 
+--}}
+
+<h1>Orders</h1>
+
+{{! READ table }}
+<table>
+    <thead>
+        {{! For the table header row, we print the DB attribute names }}
+        <tr>
+            {{#each orders.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{! For each row, print the id, name, description, cost, and stock amount }}
+        {{#each orders}}
+        <tr>
+            <td>{{this.orderID}}</td>
+            <td>{{this.customerID}}</td>
+            <td>{{this.employeeID}}</td>
+            <td>{{this.orderDate}}</td>
+            <td>{{this.orderCost}}</td>
+
+            {{! DELETE form }}
+            <form id='delete_order_form'>
+                <input type='hidden' name='delete_order_id' value='{{this.orderID}}' />
+                <td>
+                    <button type='submit'>
+                        Delete
+                    </button>
+                </td>
+            </form>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{! UPDATE form }}
+<h2>Update an Order</h2>
+<form class='cForm' id='update_order_form'>
+    <label for='update_order_id'>Order to Update: </label>
+    <select name='update_order_id' id='update_order_id' required>
+        <option value='' disabled selected>Select an order</option>
+        {{#each orders}}
+        <option value='{{this.orderID}}'>
+            {{this.orderID}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for='update_orderDate'>Date: </label>
+    <input type="Date" id="update_orderDate" name="update_orderDate"/>
+
+    <label for='update_order_cost'>Cost: </label>
+    <input type="number" id="update_order_cost" name="update_order_cost" step="0.01" min="0" placeholder="Enter cost"/>
+
+    <input type='submit' />
+</form>
+
+{{! CREATE form }}
+<h2>Create an Order</h2>
+<form class='cuForm' id='create_order_form'>
+	{{! dropdown menu of existing customers' names }}
+    <label for='create_order_customerID'>Customer Name: </label>
+    <select name='create_order_customerID' id='create_order_customerID' required>
+	    <option value='' disabled selected></option>
+            {{#each customers}}
+        <option value='{{this.customerID}}' required>
+            {{this.customerID}}
+            -
+            {{this.customerName}}
+        </option>
+        {{/each}}
+  </select>
+
+	{{! dropdown menu of existing employees’ names }}
+  <label for='create_order_employeeID'>Employee Name: </label>
+  <select name='create_order_employeeID' id='create_order_employeeID' required>
+        <option value='' disabled selected></option>
+            {{#each employees}}
+        <option value='{{this.id}}' required>
+            {{this.id}}
+            -
+            {{this.employeeName}}
+        </option>
+        {{/each}}
+  </select>
+
+    <label for='create_order_orderDate'>Date: </label>
+    <input type='date' name='create_order_orderDate' id='create_order_orderDate' required />
+
+    <label for='create_order_orderCost'>Cost: </label>
+    <input type='number' name='create_order_orderCost' id='create_order_orderCost' step="0.01" min="0" max="99999999.99" required />
+
+    <input type='submit' />
+</form>
