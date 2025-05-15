@@ -30,8 +30,8 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
             <td>{{this.orderID}}</td>
             <td>{{this.orderDate}}</td>
 
-            <form id="delete_toy_order_form">
-                <input type="hidden" name="delete_toy_order_id" value="{{this.toyOrderID}}" />
+            <form id="delete_toyorder_form">
+                <input type="hidden" name="delete_toyorder_id" value="{{this.toyOrderID}}" />
                 <td><button type="submit">Delete</button></td>
             </form>
         </tr>
@@ -43,7 +43,6 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 <h2>Update a Toy Order</h2>
 <form class='cForm' id='update_toyorder_form'>
     <label for='update_toyorder_id'>Toy Order to Update: </label>
-
     <select name='update_toyorder_id' id='update_toyorder_id' required>
         <option value='' disabled selected>Select a Toy Order</option>
         {{#each toyorders}}
@@ -53,8 +52,8 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
         {{/each}}
     </select>
 
-    <label for='update_toy_id'>Toy </label>
-    <select name='update_toy_id' id='update_toy_id' required>
+    <label for='update_toy_toyid'>Toy </label>
+    <select name='update_toy_toyid' id='update_toy_toyid' required>
         <option value='' disabled selected>Select a toy</option>
         {{#each toys}}
         <option value='{{this.toyID}}'>
@@ -79,3 +78,6 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
     <input type='submit' />
 </form>
+
+{{!-- No need for a ‘create ToyOrder’ form, since adding to the 
+Orders table automatically adds to the ToyOrders table one --}}

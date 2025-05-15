@@ -40,9 +40,7 @@ app.get('/', async function (req, res) {
 app.get('/toys', async function (req, res) {
     try {
         // Create and execute our queries
-        // In query1, we use select all of the data on the Toys table
-        const query1 = 'SELECT * FROM Toys;';
-        const [toys] = await db.query(query1);
+        const [toys] = await db.query('SELECT * FROM Toys;');
 
         // Render the toys.hbs file, and also send the renderer
         //  an object that contains our Toys information
@@ -59,13 +57,17 @@ app.get('/toys', async function (req, res) {
 app.get('/orders', async function (req, res) {
     try {
         // Create and execute our queries
-        // In query1, we use select all of the data on the Orders table
-        const query1 = 'SELECT * FROM Orders;';
-        const [orders] = await db.query(query1);
+        const [orders] = await db.query('SELECT * FROM Orders;');
+        const [customers] = await db.query('SELECT * FROM Customers');
+        const [employees] = await db.query('SELECT * FROM Employeess');
 
         // Render the orders.hbs file, and also send the renderer
         //  an object that contains our Orders information
-        res.render('orders', { orders: orders });
+        res.render('orders', { 
+            orders: orders,
+            customers: customers,
+            employees: employees
+         });
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser
@@ -78,9 +80,7 @@ app.get('/orders', async function (req, res) {
 app.get('/customers', async function (req, res) {
     try {
         // Create and execute our queries
-        // In query1, we use select all of the data on the Customers table
-        const query1 = 'SELECT * FROM Customers;';
-        const [customers] = await db.query(query1);
+        const [customers] = await db.query('SELECT * FROM Customers;');
 
         // Render the customers.hbs file, and also send the renderer
         //  an object that contains our Customers information
@@ -97,9 +97,7 @@ app.get('/customers', async function (req, res) {
 app.get('/employees', async function (req, res) {
     try {
         // Create and execute our queries
-        // In query1, we use select all of the data on the Employees table
-        const query1 = 'SELECT * FROM Employees;';
-        const [employees] = await db.query(query1);
+        const [employees] = await db.query('SELECT * FROM Employees;');
         const [departments] = await db.query('SELECT * FROM Departments;');
 
         // Render the toys.hbs file, and also send the renderer
@@ -121,9 +119,7 @@ app.get('/employees', async function (req, res) {
 app.get('/departments', async function (req, res) {
     try {
         // Create and execute our queries
-        // In query1, we use select all of the data on the Departments table
-        const query1 = 'SELECT * FROM Departments;';
-        const [departments] = await db.query(query1);
+        const [departments] = await db.query('SELECT * FROM Departments;');
 
         // Render the departments.hbs file, and also send the renderer
         //  an object that contains our Departments information

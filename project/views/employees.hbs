@@ -76,59 +76,29 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
     <label for='update_department_position'>Position: </label>
     <input type="text" id="update_department_position" name="update_department_position" placeholder="Enter position" />
 
-    
-
-
     <input type='submit' />
 </form>
 
 {{! CREATE form }}
-{{!-- <h2>Create a Toy</h2>
-<form class='cuForm' id='create_toyorder_form'>
-    <label for='create_toy_toyName'>Toy Name: </label>
-    <input type='text' name='create_toy_toyName' id='create_toy_toyName' required />
-
-    <label for='create_toyorder_toyDescription'>Toy Description: </label>
-    <input type='text' name='create_toy_toyDescription' id='create_toy_toyDescription' />
-
-    <label for='create_toyorder_toyCost'>Toy Cost: </label>
-    <input type='number' name='create_toy_toyCost' id='create_toy_toyCost' step="0.01" min="0" max="99999999.99" required />
-
-    <label for='create_toy_toyStockAmount'>Toy Stock Amount: </label>
-    <input type='number' name='create_toy_toyStockAmount' id='create_toy_toyStockAmount' min="0" required />
-
-    <input type='submit' />
-</form> --}}
-
-{{! UPDATE form }}
-{{!-- <h2>Update a Person</h2>
-<form class='cuForm' id='update_person_form'>
-    <label for='update_person_id'>Person to Update: </label>
-    <select name='update_person_id' id='update_person_id' required>
-        <option value='' disabled selected>Select a Person</option>
-        {{#each people}}
+<h2>Create an Employee</h2>
+<form class='cuForm' id='create_employee_form'>
+    <label for='create_employee_departmentID'>Department Name: </label>
+    <select name='create_employee_departmentID' id='create_employee_departmentID' required>
+        <option value='' disabled selected>Department Name:</option>
+            {{#each departments}}
         <option value='{{this.id}}' required>
-            {{this.id}}
+            {{this.departmentID}}
             -
-            {{this.fname}}
-            {{this.lname}}
+            {{this.departmentName}}
         </option>
         {{/each}}
-    </select> --}}
+  </select>
 
-    {{!-- <label for='update_person_homeworld'>Homeworld: </label>
-    <select name='update_person_homeworld' id='update_person_homeworld'>
-        <option value='NULL' disabled selected>Select a Planet</option>
-        <option value='NULL'>&lt; None &gt;</option>
-        {{#each homeworlds}}
-        <option value='{{this.id}}' required>
-            {{this.name}}
-        </option>
-        {{/each}}
-    </select> --}}
+    <label for='create_employee_employeeName'>Address: </label>
+    <input type='text' name='create_employee_employeeName' id='create_employee_employeeName' required />
 
-    {{!-- <label for='update_person_age'>Age: </label>
-    <input type='number' name='update_person_age' id='update_person_age' min='0' />
+    <label for='create_employee_employeePosition'>Phone Number: </label>
+    <input type='text' name='create_employee_employeePosition' id='create_employee_employeePosition' required />
 
     <input type='submit' />
-</form> --}}
+</form>
