@@ -20,11 +20,31 @@ const db = require('./database/db-connector');
 
 // Handlebars
 const { engine } = require('express-handlebars'); // Import express-handlebars engine
+const path = require('path'); // Import path module to resolve file paths
 app.engine('.hbs', engine({ extname: '.hbs' })); // Create instance of handlebars
 app.set('view engine', '.hbs'); // Use handlebars engine for *.hbs files.
+app.set('views', path.join(__dirname, 'views')); // Set the views directory
 
 // ########################################
 // ########## ROUTE HANDLERS
+
+// RESET ROUTE
+app.post('/reset-database', async (req, res) => {
+    try {
+        if (req.body.reset_action === 'reset') {
+        // Call the stored procedure to reset the database
+        await db.query('CALL sp_load_toyStoreDB()');
+        // Redirect to the home page with a success query parameter
+        res.redirect('/?success=true');
+        } else {
+        res.status(400).send('Invalid action.');
+        }
+    } catch (error) {
+        console.error('Error resetting database:', error);
+        // Redirect with an error query parameter
+        res.redirect('/?success=false');
+    }
+});
 
 // READ ROUTES
 app.get('/', async function (req, res) {
@@ -157,6 +177,32 @@ app.get('/toyorders', async function (req, res) {
                                   toys: toys,
                                   orders: orders
          });
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+// DELETE ROUTES
+app.post('/customers/delete', async function (req, res) {
+    try {
+        // Parse frontend form information
+        let data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = `CALL sp_DeleteCustomer(?);`;
+        await db.query(query1, [data.delete_customer_id]);
+
+        console.log(`DELETE Customer. ID: ${data.delete_customer_id} ` +
+            `Name: ${data.delete_customer_name}`
+        );
+
+        // Redirect the user to the updated webpage data
+        res.redirect('/customers');
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser
