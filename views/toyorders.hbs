@@ -80,3 +80,33 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
 {{!-- No need for a ‘create ToyOrder’ form, since adding to the 
 Orders table automatically adds to the ToyOrders table one --}}
+
+{{! CREATE form }}
+<h2>Add a Toy Order</h2>
+<form class='cuForm' id='create_toyorder_form'>
+	{{! dropdown menu of existing orders to add to }}
+    <label for='create_toyorder_orderID'>Order to add to: </label>
+    <select name='create_toyorder_orderID' id='create_toyorder_orderID' required>
+	    <option value='' disabled selected></option>
+            {{#each orders}}
+        <option value='{{this.orderID}}' required>
+            {{this.orderID}}
+        </option>
+        {{/each}}
+  </select>
+
+	{{! dropdown menu of existing employees’ names }}
+  <label for='create_toyorder_toyID'>Toy Name: </label>
+  <select name='create_toyorder_toyID' id='create_toyorder_toyID' required>
+        <option value='' disabled selected></option>
+            {{#each toys}}
+        <option value='{{this.toyID}}' required>
+            {{this.toyID}}
+            -
+            {{this.toyName}}
+        </option>
+        {{/each}}
+  </select>
+
+    <input type='submit' />
+</form>
