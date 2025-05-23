@@ -3,6 +3,12 @@
 // Based on:
 // Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948
 
+// Citation for use of AI Tools:
+// Date: 05/22/2025
+// Prompts used to help fix project directory issues.
+// "I have just moved all my files into a new directory. I am getting an error when I try to run my app.js file. The website states that it cannot find the views folder. I have moved the views folder into the same directory as my app.js file. How do I fix this error?"
+// AI Source URL: www.grok.com
+
 // ######################
 // ########## SETUP
 
