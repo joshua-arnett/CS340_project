@@ -218,6 +218,74 @@ app.post('/customers/delete', async function (req, res) {
     }
 });
 
+// Employee sp
+// Create Employee using Stored Procedure
+app.post('/create-employee', async function (req, res) {
+    try {
+        // Parse frontend form information
+        let data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query = `CALL AddEmployee(?, ?, ?)`;
+        await db.query(query, [
+            data.create_employee_departmentID,
+            data.create_employee_employeeName,
+            data.create_employee_employeePosition
+        ]);
+
+        console.log(`CREATE Employee. Name: ${data.create_employee_employeeName}, ` +
+            `Department ID: ${data.create_employee_departmentID}, ` +
+            `Position: ${data.create_employee_employeePosition}`
+        );
+
+        // Redirect the user to the updated webpage
+        res.redirect('/employees');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        res.status(500).send(
+            'An error occurred while adding the employee.'
+        );
+    }
+});
+
+// Delete Employee using Stored Procedure
+app.post('/employees/delete', async (req, res) => {
+    try {
+        let data = req.body;
+
+        const query = `CALL sp_DeleteEmployee(?);`;
+        await db.query(query, [data.delete_employee_id]);
+
+        console.log(`DELETE Employee. ID: ${data.delete_employee_id} Name: ${data.delete_employee_name}`);
+
+        res.redirect('/employees');
+    } catch (error) {
+        console.error('Error deleting employee:', error);
+        res.status(500).send('An error occurred while deleting the employee. This employee may have an active order');
+    }
+});
+
+app.post('/update-employee', async function (req, res) {
+    try {
+        const data = req.body;
+
+        const query = `CALL UpdateEmployee(?, ?, ?)`;
+        await db.query(query, [
+            data.update_employee_id,
+            data.update_department_id,
+            data.update_department_position
+        ]);
+
+        console.log(`UPDATED Employee. ID: ${data.update_employee_id}`);
+
+        res.redirect('/employees');
+    } catch (error) {
+        console.error('Error updating employee:', error);
+        res.status(500).send('An error occurred while updating the employee.');
+    }
+});
+
 // ########################################
 // ########## LISTENER
 

@@ -31,7 +31,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
             <td>{{this.employeePosition}}</td>
 
             {{! DELETE form }}
-            <form id='delete_employee_form'>
+            <form id='delete_employee_form' method='POST' action='/employees/delete'>
                 <input type='hidden' name='delete_employee_id' value='{{this.employeeID}}' />
                 <input type='hidden' name='delete_employee_name' value='{{this.employeeName}}' />
                 <td>
@@ -47,7 +47,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
 {{! UPDATE form }}
 <h2>Update an Employee</h2>
-<form class='cForm' id='update_employee_form'>
+<form class='cForm' id='update_employee_form' method='POST' action='/update-employee'>
     <label for='update_employee_id'>Employee to Update: </label>
 
     <select name='update_employee_id' id='update_employee_id' required>
@@ -81,7 +81,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
 {{! CREATE form }}
 <h2>Create an Employee</h2>
-<form class='cuForm' id='create_employee_form'>
+<form class='cuForm' id='create_employee_form' method='POST' action='/create-employee'>
     <label for='create_employee_employeeName'>Name: </label>
     <input type='text' name='create_employee_employeeName' id='create_employee_employeeName' required />
 
