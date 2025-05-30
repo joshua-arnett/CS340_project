@@ -4,6 +4,10 @@ const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_DATABASE = process.env.DB_DATABASE;
 
+// DB_USER='cs340_arnettj';
+// DB_PASSWORD='7494';
+// DB_DATABASE='cs340_arnettj';
+
 // Get an instance of mysql we can use in the app
 let mysql = require('mysql2')
 

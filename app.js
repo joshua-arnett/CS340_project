@@ -19,6 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+// const PORT = 4788; // testing
 const PORT = 4758;
 
 // Database
@@ -262,7 +263,7 @@ app.post('/employees/delete', async (req, res) => {
         res.redirect('/employees');
     } catch (error) {
         console.error('Error deleting employee:', error);
-        res.status(500).send('An error occurred while deleting the employee. This employee may have an active order');
+        res.status(500).send('An error occurred while deleting the employee.');
     }
 });
 
@@ -285,6 +286,146 @@ app.post('/update-employee', async function (req, res) {
         res.status(500).send('An error occurred while updating the employee.');
     }
 });
+
+// Department sp
+app.post('/departments/create', async (req, res) => {
+    try {
+        const {
+            create_department_departmentName,
+            create_department_departmentManager,
+            create_department_departmentAddress
+        } = req.body;
+
+        await db.query('CALL CreateDepartment(?, ?, ?)', [
+            create_department_departmentName,
+            create_department_departmentManager,
+            create_department_departmentAddress
+        ]);
+
+        res.redirect('/departments');
+    } catch (error) {
+        console.error('Error creating department:', error);
+        res.status(500).send('Error creating department');
+    }
+});
+
+app.post('/departments/update', async (req, res) => {
+    try {
+        const {
+            update_department_id,
+            update_department_name,
+            update_department_manager,
+            update_department_address
+        } = req.body;
+
+        await db.query('CALL UpdateDepartment(?, ?, ?, ?)', [
+            update_department_id,
+            update_department_name,
+            update_department_manager,
+            update_department_address
+        ]);
+
+        res.redirect('/departments');
+    } catch (error) {
+        console.error('Error updating department:', error);
+        res.status(500).send('Error updating department');
+    }
+});
+
+app.post('/departments/delete', async (req, res) => {
+    try {
+        const { delete_department_id } = req.body;
+
+        await db.query('CALL DeleteDepartment(?)', [delete_department_id]);
+
+        res.redirect('/departments');
+    } catch (error) {
+        console.error('Error deleting department:', error);
+        res.status(500).send('Error deleting department');
+    }
+});
+
+// Toys sp
+app.post('/toys/create', async (req, res) => {
+    try {
+        const {
+            create_toy_toyName,
+            create_toy_toyDescription,
+            create_toy_toyCost,
+            create_toy_toyStockAmount
+        } = req.body;
+
+        await db.query('CALL CreateToy(?, ?, ?, ?)', [
+            create_toy_toyName,
+            create_toy_toyDescription,
+            create_toy_toyCost,
+            create_toy_toyStockAmount
+        ]);
+
+        res.redirect('/toys');
+    } catch (error) {
+        console.error('Error creating toy:', error);
+        res.status(500).send('Error creating toy');
+    }
+});
+
+app.post('/toys/update', async (req, res) => {
+    try {
+        const {
+            update_toy_id,
+            update_toy_name,
+            update_toy_description,
+            update_toy_cost,
+            update_toy_stockamount
+        } = req.body;
+
+        await db.query('CALL UpdateToy(?, ?, ?, ?, ?)', [
+            update_toy_id,
+            update_toy_name,
+            update_toy_description,
+            update_toy_cost,
+            update_toy_stockamount
+        ]);
+
+        res.redirect('/toys');
+    } catch (error) {
+        console.error('Error updating toy:', error);
+        res.status(500).send('Error updating toy');
+    }
+});
+
+app.post('/toys/delete', async (req, res) => {
+    try {
+        const { delete_toy_id } = req.body;
+        await db.query('CALL DeleteToy(?)', [delete_toy_id]);
+
+        res.redirect('/toys');
+    } catch (error) {
+        console.error('Error deleting toy:', error);
+        res.status(500).send('Error deleting toy');
+    }
+});
+
+// toyOrder sp
+// create
+app.post('/toyorders/create', async (req, res) => {
+    try {
+        console.log('Received data:', req.body); // Debugging line
+
+        const { create_toyorder_orderID, create_toyorder_toyID } = req.body;
+
+        await db.query('CALL CreateToyOrder(?, ?)', [
+            create_toyorder_orderID,
+            create_toyorder_toyID,
+        ]);
+
+        res.redirect('/toyorders');
+    } catch (error) {
+        console.error('Error creating toy order:', error);
+        res.status(500).send('Error creating toy order');
+    }
+});
+
 
 // ########################################
 // ########## LISTENER

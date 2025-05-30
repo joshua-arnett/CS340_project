@@ -16,7 +16,7 @@ DELIMITER ;
 
 
 -- delete--------------------------------------
--- Don't delete employees with active orders!!!
+-- Delete employee will also delete reletive order 
 DELIMITER //
 
 CREATE PROCEDURE sp_DeleteEmployee(IN empID INT)

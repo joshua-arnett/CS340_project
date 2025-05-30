@@ -32,7 +32,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
             <td>{{this.toyStockAmount}}</td>
 
             {{! DELETE form }}
-            <form id='delete_toy_form'>
+            <form method="POST" action="/toys/delete" style="display:inline;">
                 <input type='hidden' name='delete_toy_id' value='{{this.toyID}}' />
                 <input type='hidden' name='delete_toy_name' value='{{this.toyName}}' />
                 <td>
@@ -48,12 +48,12 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
 {{! UPDATE form }}
 <h2>Update a Toy</h2>
-<form class='cForm' id='update_toy_form'>
+<form class='cForm' id='update_toy_form' method="POST" action="/toys/update">
     <label for='update_toy_id'>Toy to Update: </label>
     <select name='update_toy_id' id='update_toy_id' required>
         <option value='' disabled selected>Select a Toy</option>
         {{#each toys}}
-        <option value='{{this.toysID}}' required>
+        <option value='{{this.toyID}}' required>
             {{this.toyID}}
             -
             {{this.toyName}}
@@ -61,22 +61,25 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
         {{/each}}
     </select>
 
+    <label for="update_toy_name">Toy name:</label>
+    <input type="text" name="update_toy_name" required />
+
     <label for='update_toy_description'>Description: </label>
-    <input type="text" id="update_toy_description" name="update_toy_description" placeholder="Enter toy description" />
+    <input type="text" id="update_toy_description" name="update_toy_description" placeholder="Enter toy description" required />
 
 
     <label for='update_toy_cost'>Cost: </label>
-    <input type="number" id="update_toy_cost" name="update_toy_cost" step="0.01" min="0" placeholder="Enter cost"/>
+    <input type="number" id="update_toy_cost" name="update_toy_cost" step="0.01" min="0" placeholder="Enter cost"required />
 
     <label for='update_toy_stockamount'>Stock Amount: </label>
-    <input type="number" id="update_toy_stockamount" name="update_toy_stockamount" step="1" min="0" placeholder="Enter amount"/>
+    <input type="number" id="update_toy_stockamount" name="update_toy_stockamount" step="1" min="0" placeholder="Enter amount" required/>
 
     <input type='submit' />
 </form>
 
 {{! CREATE form }}
 <h2>Create a Toy</h2>
-<form class='cuForm' id='create_toy_form'>
+<form class='cuForm' id='create_toy_form' method="POST" action="/toys/create">
     <label for='create_toy_toyName'>Toy Name: </label>
     <input type='text' name='create_toy_toyName' id='create_toy_toyName' required />
 

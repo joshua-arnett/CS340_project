@@ -31,7 +31,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
             <td>{{this.departmentAddress}}</td>
 
             {{! DELETE form }}
-            <form id='delete_department_form'>
+            <form method="POST" action="/departments/delete">
                 <input type='hidden' name='delete_department_id' value='{{this.departmentID}}' />
                 <input type='hidden' name='delete_department_name' value='{{this.departmentName}}' />
                 <td>
@@ -47,7 +47,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
 {{! UPDATE form }}
 <h2>Update a Department</h2>
-<form class='cForm' id='update_department_form'>
+<form id="update_department_form" method="POST" action="/departments/update">
     <label for='update_department_id'>Department to Update: </label>
     <select name='update_department_id' id='update_department_id' required>
         <option value='' disabled selected>Select a Department</option>
@@ -60,11 +60,14 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
         {{/each}}
     </select>
 
+    <label for="update_department_name">Department name:</label>
+    <input type="text" name="update_department_name" required />
+
     <label for='update_department_manager'>Manager: </label>
-    <input type="text" id="update_department_manager" name="update_department_manager" placeholder="Enter name here" />
+    <input type="text" id="update_department_manager" name="update_department_manager" placeholder="Enter name here" required/>
 
     <label for='update_department_address'>Address: </label>
-    <input type="text" id="update_department_address" name="update_department_address" placeholder="Enter address here" />
+    <input type="text" id="update_department_address" name="update_department_address" placeholder="Enter address here" required />
 
 
     <input type='submit' />
@@ -72,7 +75,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
 {{! CREATE form }}
 <h2>Create a Department</h2>
-<form class='cuForm' id='create_department_form'>
+<form id="create_department_form" method="POST" action="/departments/create">
     <label for='create_department_departmentName'>Department Name: </label>
     <input type='text' name='create_department_departmentName' id='create_department_departmentName' required />
 
