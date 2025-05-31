@@ -47,7 +47,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
 {{! UPDATE form }}
 <h2>Update a Department</h2>
-<form id="update_department_form" method="POST" action="/departments/update">
+<form class='cuForm' id="update_department_form" method="POST" action="/departments/update">
     <label for='update_department_id'>Department to Update: </label>
     <select name='update_department_id' id='update_department_id' required>
         <option value='' disabled selected>Select a Department</option>
@@ -75,7 +75,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
 {{! CREATE form }}
 <h2>Create a Department</h2>
-<form id="create_department_form" method="POST" action="/departments/create">
+<form class='cuForm' id="create_department_form" method="POST" action="/departments/create">
     <label for='create_department_departmentName'>Department Name: </label>
     <input type='text' name='create_department_departmentName' id='create_department_departmentName' required />
 

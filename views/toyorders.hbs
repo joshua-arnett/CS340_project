@@ -42,7 +42,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
 {{! UPDATE form }}
 <h2>Update a Toy Order</h2>
-<form class='cForm' id='update_toyorder_form'>
+<form class='cuForm' id='update_toyorder_form'>
     <label for='update_toyorder_id'>Toy Order to Update: </label>
     <select name='update_toyorder_id' id='update_toyorder_id' required>
         <option value='' disabled selected>Select a Toy Order</option>
@@ -83,7 +83,7 @@ Orders table automatically adds to the ToyOrders table one --}}
 
 {{! CREATE form }}
 <h2>Add a Toy Order</h2>
-<form class='cuForm' id='create_toyorder_form'>
+<form class='cuForm' id='create_toyorder_form' method='POST' action='/toyorders/create'>
 	{{! dropdown menu of existing orders to add to }}
     <label for='create_toyorder_orderID'>Order to add to: </label>
     <select name='create_toyorder_orderID' id='create_toyorder_orderID' required>
