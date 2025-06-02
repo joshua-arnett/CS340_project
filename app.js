@@ -229,7 +229,7 @@ app.post('/create-employee', async function (req, res) {
 
         // Create and execute our query
         // Using parameterized queries (Prevents SQL injection attacks)
-        const query = `CALL AddEmployee(?, ?, ?)`;
+        const query = `CALL sp_CreateEmployee(?, ?, ?)`;
         await db.query(query, [
             data.create_employee_departmentID,
             data.create_employee_employeeName,
@@ -272,7 +272,7 @@ app.post('/update-employee', async function (req, res) {
     try {
         const data = req.body;
 
-        const query = `CALL UpdateEmployee(?, ?, ?)`;
+        const query = `CALL sp_UpdateEmployee(?, ?, ?)`;
         await db.query(query, [
             data.update_employee_id,
             data.update_department_id,
@@ -297,7 +297,7 @@ app.post('/departments/create', async (req, res) => {
             create_department_departmentAddress
         } = req.body;
 
-        await db.query('CALL CreateDepartment(?, ?, ?)', [
+        await db.query('CALL sp_CreateDepartment(?, ?, ?)', [
             create_department_departmentName,
             create_department_departmentManager,
             create_department_departmentAddress
@@ -319,7 +319,7 @@ app.post('/departments/update', async (req, res) => {
             update_department_address
         } = req.body;
 
-        await db.query('CALL UpdateDepartment(?, ?, ?, ?)', [
+        await db.query('CALL sp_UpdateDepartment(?, ?, ?, ?)', [
             update_department_id,
             update_department_name,
             update_department_manager,
@@ -337,7 +337,7 @@ app.post('/departments/delete', async (req, res) => {
     try {
         const { delete_department_id } = req.body;
 
-        await db.query('CALL DeleteDepartment(?)', [delete_department_id]);
+        await db.query('CALL sp_DeleteDepartment(?)', [delete_department_id]);
 
         res.redirect('/departments');
     } catch (error) {
@@ -356,7 +356,7 @@ app.post('/toys/create', async (req, res) => {
             create_toy_toyStockAmount
         } = req.body;
 
-        await db.query('CALL CreateToy(?, ?, ?, ?)', [
+        await db.query('CALL sp_CreateToy(?, ?, ?, ?)', [
             create_toy_toyName,
             create_toy_toyDescription,
             create_toy_toyCost,
@@ -380,7 +380,7 @@ app.post('/toys/update', async (req, res) => {
             update_toy_stockamount
         } = req.body;
 
-        await db.query('CALL UpdateToy(?, ?, ?, ?, ?)', [
+        await db.query('CALL sp_UpdateToy(?, ?, ?, ?, ?)', [
             update_toy_id,
             update_toy_name,
             update_toy_description,
@@ -398,7 +398,7 @@ app.post('/toys/update', async (req, res) => {
 app.post('/toys/delete', async (req, res) => {
     try {
         const { delete_toy_id } = req.body;
-        await db.query('CALL DeleteToy(?)', [delete_toy_id]);
+        await db.query('CALL sp_DeleteToy(?)', [delete_toy_id]);
 
         res.redirect('/toys');
     } catch (error) {
@@ -415,7 +415,7 @@ app.post('/toyorders/create', async (req, res) => {
 
         const { create_toyorder_orderID, create_toyorder_toyID } = req.body;
 
-        await db.query('CALL CreateToyOrder(?, ?)', [
+        await db.query('CALL sp_CreateToyOrder(?, ?)', [
             create_toyorder_orderID,
             create_toyorder_toyID,
         ]);
