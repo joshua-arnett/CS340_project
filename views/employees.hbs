@@ -47,7 +47,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
 {{! UPDATE form }}
 <h2>Update an Employee</h2>
-<form class='cuForm' id='update_employee_form' method='POST' action='/update-employee'>
+<form class='cuForm' id='update_employee_form' method='POST' action='/employees/update'>
     <label for='update_employee_id'>Employee to Update: </label>
 
     <select name='update_employee_id' id='update_employee_id' required>
@@ -61,8 +61,8 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
         {{/each}}
     </select>
 
-    <label for='update_department_id'>Department: </label>
-    <select name='update_department_id' id='update_department_id' required>
+    <label for='update_departmentID'>Department: </label>
+    <select name='update_departmentID' id='update_departmentID' required>
         <option value='' disabled selected>Select a Department</option>
         {{#each departments}}
         <option value='{{this.departmentID}}'>
@@ -81,7 +81,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
 {{! CREATE form }}
 <h2>Create an Employee</h2>
-<form class='cuForm' id='create_employee_form' method='POST' action='/create-employee'>
+<form class='cuForm' id='create_employee_form' method='POST' action='/employees/create'>
     <label for='create_employee_name'>Name: </label>
     <input type='text' name='create_employee_name' id='create_employee_name' required />
 

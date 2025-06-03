@@ -135,13 +135,13 @@ app.post('/employees/create', async function (req, res) {
         const query = `CALL sp_CreateEmployee(?, ?, ?)`;
         await db.query(query, [
             data.create_employee_departmentID,
-            data.create_employee_employeeName,
-            data.create_employee_employeePosition
+            data.create_employee_name,
+            data.create_employee_position
         ]);
 
-        console.log(`CREATE Employee. Name: ${data.create_employee_employeeName}, ` +
+        console.log(`CREATE Employee. Name: ${data.create_employee_name}, ` +
             `Department ID: ${data.create_employee_departmentID}, ` +
-            `Position: ${data.create_employee_employeePosition}`
+            `Position: ${data.create_employee_position}`
         );
 
         // Redirect the user to the updated webpage
