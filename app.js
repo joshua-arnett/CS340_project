@@ -166,14 +166,14 @@ app.post('/orders/create', async function (req, res) {
         await db.query(query1, [
             data.create_order_customerID,
             data.create_order_employeeID,
-            data.create_order_orderDate,
-            data.create_order_orderCost
+            data.create_order_date,
+            data.create_order_cost
         ]);
 
         console.log(`CREATE Order. Customer ID: ${data.create_order_customerID}, ` +
             `Employee ID: ${data.create_order_employeeID}, ` +
-            `Order Date: ${data.create_order_orderDate}, ` +
-            `Order Cost: ${data.create_order_orderCost}`
+            `Order Date: ${data.create_order_date}, ` +
+            `Order Cost: ${data.create_order_cost}`
         );
 
         // Redirect the user to the updated webpage
@@ -300,7 +300,15 @@ app.get('/employees', async function (req, res) {
 app.get('/orders', async function (req, res) {
     try {
         // Create and execute our queries
-        const [orders] = await db.query('SELECT * FROM Orders;');
+        const [orders] = await db.query(`
+            SELECT 
+            orderID,
+            customerID,
+            employeeID,
+            DATE_FORMAT(orderDate, '%d %b %Y') AS orderDate,
+            orderCost
+            FROM Orders;`
+        );
         const [customers] = await db.query('SELECT * FROM Customers');
         const [employees] = await db.query('SELECT * FROM Employees');
 
@@ -347,7 +355,7 @@ app.get('/toyorders', async function (req, res) {
             ToyOrders.toyID,
             Toys.toyName,
             ToyOrders.orderID,
-            Orders.orderDate
+            DATE_FORMAT(orderDate, '%d %b %Y') AS orderDate
         FROM ToyOrders
         JOIN Toys ON ToyOrders.toyID = Toys.toyID
         JOIN Orders ON ToyOrders.orderID = Orders.orderID;`;
@@ -576,12 +584,15 @@ app.post('/employees/delete', async (req, res) => {
     }
 });
 
+// Delete Department using Stored Procedure
 app.post('/departments/delete', async (req, res) => {
     try {
         data = req.body;
 
         await db.query('CALL sp_DeleteDepartment(?)', [data.delete_department_id]);
-        console.log(`DELETE Department. ID: ${data.delete_department_id} Name: ${data.delete_department_name}`);
+        console.log(`DELETE Department. ID: ${data.delete_department_id}, ` +
+            `Department Name: ${data.delete_department_name}, `
+        );
 
         res.redirect('/departments');
     } catch (error) {
@@ -590,6 +601,31 @@ app.post('/departments/delete', async (req, res) => {
     }
 });
 
+// Delete Order using Stored Procedure
+app.post('/orders/delete', async function (req, res) {
+    try {
+        // Parse frontend form information
+        const data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = `CALL sp_DeleteOrder(?);`;
+        await db.query(query1, [data.delete_order_id]);
+
+        console.log(`DELETE Order. ID: ${data.delete_order_id} `);
+
+        // Redirect the user to the updated webpage data
+        res.redirect('/orders');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+// Delete Toy using Stored Procedure
 app.post('/toys/delete', async (req, res) => {
     try {
         const { delete_toy_id } = req.body;
