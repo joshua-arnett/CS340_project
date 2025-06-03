@@ -82,8 +82,8 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 {{! CREATE form }}
 <h2>Create an Employee</h2>
 <form class='cuForm' id='create_employee_form' method='POST' action='/create-employee'>
-    <label for='create_employee_employeeName'>Name: </label>
-    <input type='text' name='create_employee_employeeName' id='create_employee_employeeName' required />
+    <label for='create_employee_name'>Name: </label>
+    <input type='text' name='create_employee_name' id='create_employee_name' required />
 
     <label for='create_employee_departmentID'>Department: </label>
     <select name='create_employee_departmentID' id='create_employee_departmentID' required>
@@ -97,8 +97,8 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
         {{/each}}
     </select>
 
-    <label for='create_employee_employeePosition'>Position: </label>
-    <input type='text' name='create_employee_employeePosition' id='create_employee_employeePosition' required />
+    <label for='create_employee_position'>Position: </label>
+    <input type='text' name='create_employee_position' id='create_employee_position' required />
 
     <input type='submit' />
 </form>

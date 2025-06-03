@@ -35,8 +35,22 @@ app.set('views', path.join(__dirname, 'views')); // Set the views directory
 
 // ########################################
 // ########## ROUTE HANDLERS
+// Ordered in the following way:
+// 1. Reset Route
+// 2. Create Routes
+// 3. Read Routes
+// 4. Update Routes
+// 5. Delete Routes
+// #######################
+// Within each section, the routes are ordered in the following way:
+// Customer, Department, Employee, Order, Toy, ToyOrder
+// ########################################
 
+
+// ########################################
 // RESET ROUTE
+// ###########################
+
 app.post('/reset-database', async (req, res) => {
     try {
         if (req.body.reset_action === 'reset') {
@@ -54,7 +68,170 @@ app.post('/reset-database', async (req, res) => {
     }
 });
 
+// ########################################
+// CREATE ROUTES
+// ###########################
+
+// Create Customer using Stored Procedure
+app.post('/customers/create', async function (req, res) {
+    try {
+        // Parse frontend form information
+        const data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = `CALL sp_CreateCustomer(?, ?, ?)`;
+        await db.query(query1, [
+            data.create_customer_name,
+            data.create_customer_address,
+            data.create_customer_phone
+        ]);
+
+        console.log(`CREATE Customer. Name: ${data.create_customer_name} ` +
+            `Address: ${data.create_customer_address}, ` +
+            `Phone: ${data.create_customer_phone}`
+        );
+
+        // Redirect the user to the updated webpage
+        res.redirect('/customers');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        res.status(500).send(
+            'An error occurred while adding the customer.'
+        );
+    }
+});
+
+// Create Department using Stored Procedure
+app.post('/departments/create', async (req, res) => {
+    try {
+        const {
+            create_department_departmentName,
+            create_department_departmentManager,
+            create_department_departmentAddress
+        } = req.body;
+
+        await db.query('CALL sp_CreateDepartment(?, ?, ?)', [
+            create_department_departmentName,
+            create_department_departmentManager,
+            create_department_departmentAddress
+        ]);
+
+        res.redirect('/departments');
+    } catch (error) {
+        console.error('Error creating department:', error);
+        res.status(500).send('Error creating department');
+    }
+});
+
+// Create Employee using Stored Procedure
+app.post('/employees/create', async function (req, res) {
+    try {
+        // Parse frontend form information
+        const data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query = `CALL sp_CreateEmployee(?, ?, ?)`;
+        await db.query(query, [
+            data.create_employee_departmentID,
+            data.create_employee_employeeName,
+            data.create_employee_employeePosition
+        ]);
+
+        console.log(`CREATE Employee. Name: ${data.create_employee_employeeName}, ` +
+            `Department ID: ${data.create_employee_departmentID}, ` +
+            `Position: ${data.create_employee_employeePosition}`
+        );
+
+        // Redirect the user to the updated webpage
+        res.redirect('/employees');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        res.status(500).send(
+            'An error occurred while adding the employee.'
+        );
+    }
+});
+
+// Create Order using Stored Procedure
+app.post('/orders/create', async function (req, res) {
+    try {
+        // Parse frontend form information
+        const data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = `CALL sp_CreateOrder(?, ?, ?, ?)`;
+        await db.query(query1, [
+            data.create_order_customerID,
+            data.create_order_employeeID,
+            data.create_order_orderDate,
+            data.create_order_orderCost
+        ]);
+
+        console.log(`CREATE Order. Customer ID: ${data.create_order_customerID}, ` +
+            `Employee ID: ${data.create_order_employeeID}, ` +
+            `Order Date: ${data.create_order_orderDate}, ` +
+            `Order Cost: ${data.create_order_orderCost}`
+        );
+
+        // Redirect the user to the updated webpage
+        res.redirect('/orders');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        res.status(500).send(
+            'An error occurred while adding the order.'
+        );
+    }
+});
+
+// Create Toy using Stored Procedure
+app.post('/toys/create', async (req, res) => {
+    try {
+        const {
+            create_toy_toyName,
+            create_toy_toyDescription,
+            create_toy_toyCost,
+            create_toy_toyStockAmount
+        } = req.body;
+
+        await db.query('CALL sp_CreateToy(?, ?, ?, ?)', [
+            create_toy_toyName,
+            create_toy_toyDescription,
+            create_toy_toyCost,
+            create_toy_toyStockAmount
+        ]);
+
+        res.redirect('/toys');
+    } catch (error) {
+        console.error('Error creating toy:', error);
+        res.status(500).send('Error creating toy');
+    }
+});
+
+// Create Toy Order using Stored Procedure
+app.post('/toyorders/create', async (req, res) => {
+    try {
+        console.log('Received data:', req.body); // Debugging line
+
+        const { create_toyorder_orderID, create_toyorder_toyID } = req.body;
+
+        await db.query('CALL sp_CreateToyOrder(?, ?)', [
+            create_toyorder_orderID,
+            create_toyorder_toyID,
+        ]);
+
+        res.redirect('/toyorders');
+    } catch (error) {
+        console.error('Error creating toy order:', error);
+        res.status(500).send('Error creating toy order');
+    }
+});
+
+// ########################################
 // READ ROUTES
+// ###########################
 app.get('/', async function (req, res) {
     try {
         res.render('home'); // Render the home.hbs file
@@ -65,14 +242,52 @@ app.get('/', async function (req, res) {
     }
 });
 
-app.get('/toys', async function (req, res) {
+app.get('/customers', async function (req, res) {
     try {
         // Create and execute our queries
-        const [toys] = await db.query('SELECT * FROM Toys;');
+        const [customers] = await db.query('SELECT * FROM Customers;');
+
+        // Render the customers.hbs file, and also send the renderer
+        //  an object that contains our Customers information
+        res.render('customers', { customers: customers });
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+app.get('/departments', async function (req, res) {
+    try {
+        // Create and execute our queries
+        const [departments] = await db.query('SELECT * FROM Departments;');
+
+        // Render the departments.hbs file, and also send the renderer
+        //  an object that contains our Departments information
+        res.render('departments', { departments: departments });
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+app.get('/employees', async function (req, res) {
+    try {
+        // Create and execute our queries
+        const [employees] = await db.query('SELECT * FROM Employees;');
+        const [departments] = await db.query('SELECT * FROM Departments;');
 
         // Render the toys.hbs file, and also send the renderer
-        //  an object that contains our Toys information
-        res.render('toys', { toys: toys });
+        //  an object that contains our Employees information
+        res.render('employees', {
+            employees: employees,
+            departments: departments
+        });
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser
@@ -105,53 +320,14 @@ app.get('/orders', async function (req, res) {
     }
 });
 
-app.get('/customers', async function (req, res) {
+app.get('/toys', async function (req, res) {
     try {
         // Create and execute our queries
-        const [customers] = await db.query('SELECT * FROM Customers;');
-
-        // Render the customers.hbs file, and also send the renderer
-        //  an object that contains our Customers information
-        res.render('customers', { customers: customers });
-    } catch (error) {
-        console.error('Error executing queries:', error);
-        // Send a generic error message to the browser
-        res.status(500).send(
-            'An error occurred while executing the database queries.'
-        );
-    }
-});
-
-app.get('/employees', async function (req, res) {
-    try {
-        // Create and execute our queries
-        const [employees] = await db.query('SELECT * FROM Employees;');
-        const [departments] = await db.query('SELECT * FROM Departments;');
+        const [toys] = await db.query('SELECT * FROM Toys;');
 
         // Render the toys.hbs file, and also send the renderer
-        //  an object that contains our Employees information
-        res.render('employees', {
-            employees: employees,
-            departments: departments
-        });
-    } catch (error) {
-        console.error('Error executing queries:', error);
-        // Send a generic error message to the browser
-        res.status(500).send(
-            'An error occurred while executing the database queries.'
-        );
-    }
-});
-
-
-app.get('/departments', async function (req, res) {
-    try {
-        // Create and execute our queries
-        const [departments] = await db.query('SELECT * FROM Departments;');
-
-        // Render the departments.hbs file, and also send the renderer
-        //  an object that contains our Departments information
-        res.render('departments', { departments: departments });
+        //  an object that contains our Toys information
+        res.render('toys', { toys: toys });
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser
@@ -194,19 +370,29 @@ app.get('/toyorders', async function (req, res) {
     }
 });
 
-// DELETE ROUTES
-app.post('/customers/delete', async function (req, res) {
+
+// ########################################
+// UPDATE ROUTES
+// ###########################
+
+// Update Customer using Stored Procedure
+app.post('/customers/update', async function (req, res) {
     try {
         // Parse frontend form information
-        let data = req.body;
+        const data = req.body;
 
         // Create and execute our query
         // Using parameterized queries (Prevents SQL injection attacks)
-        const query1 = `CALL sp_DeleteCustomer(?);`;
-        await db.query(query1, [data.delete_customer_id]);
+        const query1 = `CALL sp_UpdateCustomer(?, ?, ?)`;
+        await db.query(query1, [
+            data.update_customer_id,
+            data.update_customer_address,
+            data.update_customer_phone
+        ]);
 
-        console.log(`DELETE Customer. ID: ${data.delete_customer_id} ` +
-            `Name: ${data.delete_customer_name}`
+        console.log(`UPDATED Customer. ID: ${data.update_customer_id}, ` +
+            `Email: ${data.update_customer_address}, ` +
+            `Phone: ${data.update_customer_phone}`
         );
 
         // Redirect the user to the updated webpage data
@@ -220,96 +406,7 @@ app.post('/customers/delete', async function (req, res) {
     }
 });
 
-// Employee sp
-// Create Employee using Stored Procedure
-app.post('/create-employee', async function (req, res) {
-    try {
-        // Parse frontend form information
-        let data = req.body;
-
-        // Create and execute our query
-        // Using parameterized queries (Prevents SQL injection attacks)
-        const query = `CALL sp_CreateEmployee(?, ?, ?)`;
-        await db.query(query, [
-            data.create_employee_departmentID,
-            data.create_employee_employeeName,
-            data.create_employee_employeePosition
-        ]);
-
-        console.log(`CREATE Employee. Name: ${data.create_employee_employeeName}, ` +
-            `Department ID: ${data.create_employee_departmentID}, ` +
-            `Position: ${data.create_employee_employeePosition}`
-        );
-
-        // Redirect the user to the updated webpage
-        res.redirect('/employees');
-    } catch (error) {
-        console.error('Error executing queries:', error);
-        res.status(500).send(
-            'An error occurred while adding the employee.'
-        );
-    }
-});
-
-// Delete Employee using Stored Procedure
-app.post('/employees/delete', async (req, res) => {
-    try {
-        let data = req.body;
-
-        const query = `CALL sp_DeleteEmployee(?);`;
-        await db.query(query, [data.delete_employee_id]);
-
-        console.log(`DELETE Employee. ID: ${data.delete_employee_id} Name: ${data.delete_employee_name}`);
-
-        res.redirect('/employees');
-    } catch (error) {
-        console.error('Error deleting employee:', error);
-        res.status(500).send('An error occurred while deleting the employee.');
-    }
-});
-
-app.post('/update-employee', async function (req, res) {
-    try {
-        const data = req.body;
-
-        const query = `CALL sp_UpdateEmployee(?, ?, ?)`;
-        await db.query(query, [
-            data.update_employee_id,
-            data.update_department_id,
-            data.update_department_position
-        ]);
-
-        console.log(`UPDATED Employee. ID: ${data.update_employee_id}`);
-
-        res.redirect('/employees');
-    } catch (error) {
-        console.error('Error updating employee:', error);
-        res.status(500).send('An error occurred while updating the employee.');
-    }
-});
-
-// Department sp
-app.post('/departments/create', async (req, res) => {
-    try {
-        const {
-            create_department_departmentName,
-            create_department_departmentManager,
-            create_department_departmentAddress
-        } = req.body;
-
-        await db.query('CALL sp_CreateDepartment(?, ?, ?)', [
-            create_department_departmentName,
-            create_department_departmentManager,
-            create_department_departmentAddress
-        ]);
-
-        res.redirect('/departments');
-    } catch (error) {
-        console.error('Error creating department:', error);
-        res.status(500).send('Error creating department');
-    }
-});
-
+// Update Department using Stored Procedure
 app.post('/departments/update', async (req, res) => {
     try {
         const {
@@ -333,43 +430,61 @@ app.post('/departments/update', async (req, res) => {
     }
 });
 
-app.post('/departments/delete', async (req, res) => {
+// Update Employee using Stored Procedure
+app.post('/employees/update', async function (req, res) {
     try {
-        const { delete_department_id } = req.body;
+        const data = req.body;
 
-        await db.query('CALL sp_DeleteDepartment(?)', [delete_department_id]);
-
-        res.redirect('/departments');
-    } catch (error) {
-        console.error('Error deleting department:', error);
-        res.status(500).send('Error deleting department');
-    }
-});
-
-// Toys sp
-app.post('/toys/create', async (req, res) => {
-    try {
-        const {
-            create_toy_toyName,
-            create_toy_toyDescription,
-            create_toy_toyCost,
-            create_toy_toyStockAmount
-        } = req.body;
-
-        await db.query('CALL sp_CreateToy(?, ?, ?, ?)', [
-            create_toy_toyName,
-            create_toy_toyDescription,
-            create_toy_toyCost,
-            create_toy_toyStockAmount
+        const query = `CALL sp_UpdateEmployee(?, ?, ?)`;
+        await db.query(query, [
+            data.update_employee_id,
+            data.update_departmentID,
+            data.update_department_position
         ]);
 
-        res.redirect('/toys');
+        console.log(`UPDATED Employee. ID: ${data.update_employee_id}, ` +
+            `Department ID: ${data.update_departmentID}, ` +
+            `Position: ${data.update_department_position}`
+        );
+
+        res.redirect('/employees');
     } catch (error) {
-        console.error('Error creating toy:', error);
-        res.status(500).send('Error creating toy');
+        console.error('Error updating employee:', error);
+        res.status(500).send('An error occurred while updating the employee.');
     }
 });
 
+// Update Order using Stored Procedure
+app.post('/orders/update', async function (req, res) {
+    try {
+        // Parse frontend form information
+        const data = req.body;
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = `CALL sp_UpdateOrder(?, ?, ?, ?)`;
+        await db.query(query1, [
+            data.update_order_id,
+            data.update_order_employeeID,
+            data.update_order_date,
+            data.update_order_cost
+        ]);
+        console.log(`UPDATED Order. ID: ${data.update_order_id} ` +
+            `Employee ID: ${data.update_order_employeeID}, ` +
+            `Order Date: ${data.update_order_date}, ` +
+            `Order Cost: ${data.update_order_cost}`
+        );
+
+        res.redirect('/orders');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+// Update Toy using Stored Procedure
 app.post('/toys/update', async (req, res) => {
     try {
         const {
@@ -395,6 +510,86 @@ app.post('/toys/update', async (req, res) => {
     }
 });
 
+// Update Toy Order using Stored Procedure
+app.post('/toyorders/update', async (req, res) => {
+    try {
+        const data = req.body;
+
+        await db.query('CALL sp_UpdateToyOrder(?, ?, ?)', [
+            data.update_toyorder_id,
+            data.update_toyorder_orderID,
+            data.update_toyorder_toyID
+        ]);
+
+        res.redirect('/toyorders');
+    } catch (error) {
+        console.error('Error updating toy order:', error);
+        res.status(500).send('Error updating toy order');
+    }
+});
+
+
+// ########################################
+// DELETE ROUTES
+// ###########################
+
+// Delete Customer using Stored Procedure
+app.post('/customers/delete', async function (req, res) {
+    try {
+        // Parse frontend form information
+        const data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = `CALL sp_DeleteCustomer(?);`;
+        await db.query(query1, [data.delete_customer_id]);
+
+        console.log(`DELETE Customer. ID: ${data.delete_customer_id} ` +
+            `Name: ${data.delete_customer_name}`
+        );
+
+        // Redirect the user to the updated webpage data
+        res.redirect('/customers');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+// Delete Employee using Stored Procedure
+app.post('/employees/delete', async (req, res) => {
+    try {
+        const data = req.body;
+
+        const query = `CALL sp_DeleteEmployee(?);`;
+        await db.query(query, [data.delete_employee_id]);
+
+        console.log(`DELETE Employee. ID: ${data.delete_employee_id} Name: ${data.delete_employee_name}`);
+
+        res.redirect('/employees');
+    } catch (error) {
+        console.error('Error deleting employee:', error);
+        res.status(500).send('An error occurred while deleting the employee.');
+    }
+});
+
+app.post('/departments/delete', async (req, res) => {
+    try {
+        const { delete_department_id } = req.body;
+
+        await db.query('CALL sp_DeleteDepartment(?)', [delete_department_id]);
+        console.log(`DELETE Department. ID: ${data.delete_department_id} Name: ${data.delete_department_name}`);
+
+        res.redirect('/departments');
+    } catch (error) {
+        console.error('Error deleting department:', error);
+        res.status(500).send('Error deleting department');
+    }
+});
+
 app.post('/toys/delete', async (req, res) => {
     try {
         const { delete_toy_id } = req.body;
@@ -404,26 +599,6 @@ app.post('/toys/delete', async (req, res) => {
     } catch (error) {
         console.error('Error deleting toy:', error);
         res.status(500).send('Error deleting toy');
-    }
-});
-
-// toyOrder sp
-// create
-app.post('/toyorders/create', async (req, res) => {
-    try {
-        console.log('Received data:', req.body); // Debugging line
-
-        const { create_toyorder_orderID, create_toyorder_toyID } = req.body;
-
-        await db.query('CALL sp_CreateToyOrder(?, ?)', [
-            create_toyorder_orderID,
-            create_toyorder_toyID,
-        ]);
-
-        res.redirect('/toyorders');
-    } catch (error) {
-        console.error('Error creating toy order:', error);
-        res.status(500).send('Error creating toy order');
     }
 });
 

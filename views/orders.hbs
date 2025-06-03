@@ -34,7 +34,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
             {{! DELETE form }}
             <form id='delete_order_form'>
-                <input type='hidden' name='delete_order_id' value='{{this.orderID}}' />
+                <input type='hidden' name='delete_order_orderID' value='{{this.orderID}}' />
                 <td>
                     <button type='submit'>
                         Delete
@@ -51,6 +51,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 <h2>Update an Order</h2>
 <form class='cuForm' id='update_order_form'>
     <label for='update_order_id'>Order to Update: </label>
+    {{!-- Dropdown menu of existing orders --}}
     <select name='update_order_id' id='update_order_id' required>
         <option value='' disabled selected>Select an order</option>
         {{#each orders}}
@@ -60,8 +61,8 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
         {{/each}}
     </select>
 
-    <label for='update_order_id'>Employee: </label>
-    <select name='update_employee_id' id='update_employee_id'>    
+    <label for='update_order_employeeID'>Employee: </label>
+    <select name='update_order_employeeID' id='update_order_employeeID'>    
         <option value='' disabled selected>Select an employee: </option>
         {{#each employees}}
         <option value='{{this.employeeID}}'>
@@ -73,8 +74,8 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
         {{/each}}
     </select>
 
-    <label for='update_orderDate'>Date: </label>
-    <input type="Date" id="update_orderDate" name="update_orderDate"/>
+    <label for='update_order_date'>Date: </label>
+    <input type="Date" id="update_order_date" name="update_order_date"/>
 
     <label for='update_order_cost'>Cost: </label>
     <input type="number" id="update_order_cost" name="update_order_cost" step="0.01" min="0" placeholder="Enter cost"/>
@@ -85,7 +86,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 {{! CREATE form }}
 <h2>Create an Order</h2>
 <form class='cuForm' id='create_order_form'>
-	{{! dropdown menu of existing customers' names }}
+	{{! Dropdown menu of existing customer names }}
     <label for='create_order_customerID'>Customer Name: </label>
     <select name='create_order_customerID' id='create_order_customerID' required>
 	    <option value='' disabled selected></option>
@@ -98,7 +99,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
         {{/each}}
   </select>
 
-	{{! dropdown menu of existing employees’ names }}
+	{{! Dropdown menu of existing employee names }}
   <label for='create_order_employeeID'>Employee Name: </label>
   <select name='create_order_employeeID' id='create_order_employeeID' required>
         <option value='' disabled selected></option>
@@ -111,11 +112,11 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
         {{/each}}
   </select>
 
-    <label for='create_order_orderDate'>Date: </label>
-    <input type='date' name='create_order_orderDate' id='create_order_orderDate' required />
+    <label for='create_order_date'>Date: </label>
+    <input type='date' name='create_order_date' id='create_order_date' required />
 
-    <label for='create_order_orderCost'>Cost: </label>
-    <input type='number' name='create_order_orderCost' id='create_order_orderCost' step="0.01" min="0" max="99999999.99" required />
+    <label for='update_order_cost'>Cost: </label>
+    <input type='number' name='update_order_cost' id='update_order_cost' step="0.01" min="0" max="99999999.99" required />
 
     <input type='submit' />
 </form>
