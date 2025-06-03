@@ -31,7 +31,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
             <td>{{this.departmentAddress}}</td>
 
             {{! DELETE form }}
-            <form method="POST" action="/departments/delete">
+            <form id='delete_department_form' method="POST" action="/departments/delete">
                 <input type='hidden' name='delete_department_id' value='{{this.departmentID}}' />
                 <input type='hidden' name='delete_department_name' value='{{this.departmentName}}' />
                 <td>

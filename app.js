@@ -106,15 +106,15 @@ app.post('/customers/create', async function (req, res) {
 app.post('/departments/create', async (req, res) => {
     try {
         const {
-            create_department_departmentName,
-            create_department_departmentManager,
-            create_department_departmentAddress
+            create_department_name,
+            create_department_manager,
+            create_department_address
         } = req.body;
 
         await db.query('CALL sp_CreateDepartment(?, ?, ?)', [
-            create_department_departmentName,
-            create_department_departmentManager,
-            create_department_departmentAddress
+            create_department_name,
+            create_department_manager,
+            create_department_address
         ]);
 
         res.redirect('/departments');
@@ -578,9 +578,9 @@ app.post('/employees/delete', async (req, res) => {
 
 app.post('/departments/delete', async (req, res) => {
     try {
-        const { delete_department_id } = req.body;
+        data = req.body;
 
-        await db.query('CALL sp_DeleteDepartment(?)', [delete_department_id]);
+        await db.query('CALL sp_DeleteDepartment(?)', [data.delete_department_id]);
         console.log(`DELETE Department. ID: ${data.delete_department_id} Name: ${data.delete_department_name}`);
 
         res.redirect('/departments');
