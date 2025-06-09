@@ -361,7 +361,11 @@ app.get('/toyorders', async function (req, res) {
         JOIN Orders ON ToyOrders.orderID = Orders.orderID;`;
         const [toyorders] = await db.query(query1);
         const [toys] = await db.query('SELECT * FROM Toys;');
-        const [orders] = await db.query('SELECT * FROM Orders;');
+        const [orders] = await db.query(`
+        SELECT DISTINCT Orders.orderID, Orders.orderDate
+        FROM Orders
+        JOIN ToyOrders ON Orders.orderID = ToyOrders.orderID;
+        `);;
 
         // Render the orders.hbs file, and also send the renderer
         //  an object that contains our Orders information
@@ -523,9 +527,8 @@ app.post('/toyorders/update', async (req, res) => {
     try {
         const data = req.body;
 
-        await db.query('CALL sp_UpdateToyOrder(?, ?, ?)', [
+        await db.query('CALL sp_UpdateToyOrder(?, ?)', [
             data.update_toyorder_id,
-            data.update_toyorder_orderID,
             data.update_toyorder_toyID
         ]);
 
@@ -570,6 +573,7 @@ app.post('/customers/delete', async function (req, res) {
 // Delete Employee using Stored Procedure
 app.post('/employees/delete', async (req, res) => {
     try {
+        // Parse frontend form information
         const data = req.body;
 
         const query = `CALL sp_DeleteEmployee(?);`;
@@ -577,16 +581,21 @@ app.post('/employees/delete', async (req, res) => {
 
         console.log(`DELETE Employee. ID: ${data.delete_employee_id} Name: ${data.delete_employee_name}`);
 
+        // Redirect the user to the updated webpage data
         res.redirect('/employees');
     } catch (error) {
         console.error('Error deleting employee:', error);
-        res.status(500).send('An error occurred while deleting the employee.');
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
     }
 });
 
 // Delete Department using Stored Procedure
 app.post('/departments/delete', async (req, res) => {
     try {
+        // Parse frontend form information
         data = req.body;
 
         await db.query('CALL sp_DeleteDepartment(?)', [data.delete_department_id]);
@@ -594,10 +603,14 @@ app.post('/departments/delete', async (req, res) => {
             `Department Name: ${data.delete_department_name}, `
         );
 
+        // Redirect the user to the updated webpage data
         res.redirect('/departments');
     } catch (error) {
         console.error('Error deleting department:', error);
-        res.status(500).send('Error deleting department');
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
     }
 });
 
@@ -628,13 +641,35 @@ app.post('/orders/delete', async function (req, res) {
 // Delete Toy using Stored Procedure
 app.post('/toys/delete', async (req, res) => {
     try {
-        const { delete_toy_id } = req.body;
-        await db.query('CALL sp_DeleteToy(?)', [delete_toy_id]);
+        // Parse frontend form information
+        const data = req.body;
+        await db.query('CALL sp_DeleteToy(?)', [data.delete_toy_id]);
 
+        // Redirect the user to the updated webpage data
         res.redirect('/toys');
     } catch (error) {
         console.error('Error deleting toy:', error);
-        res.status(500).send('Error deleting toy');
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+// Delete Toy Order using Stored Procedure
+app.post('/toyorders/delete', async (req, res) => {
+    try {
+        const { delete_toyorder_id } = req.body;
+        await db.query('CALL sp_DeleteToyOrder(?)', [delete_toyorder_id]);
+
+        // Redirect the user to the updated webpage data
+        res.redirect('/toyorders');
+    } catch (error) {
+        console.error('Error deleting toy order:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
     }
 });
 

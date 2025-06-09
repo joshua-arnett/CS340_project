@@ -31,7 +31,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
             <td>{{this.orderID}}</td>
             <td>{{this.orderDate}}</td>
 
-            <form id="delete_toyorder_form">
+            <form id="delete_toyorder_form" method="POST" action="/toyorders/delete">
                 <input type="hidden" name="delete_toyorder_id" value="{{this.toyOrderID}}" />
                 <td><button type="submit">Delete</button></td>
             </form>
@@ -42,71 +42,66 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
 {{! UPDATE form }}
 <h2>Update a Toy Order</h2>
-<form class='cuForm' id='update_toyorder_form'>
+<form class='cuForm' id='update_toyorder_form' method="POST" action="/toyorders/update">
+    {{! dropdown menu of existing toy orders to update }}
     <label for='update_toyorder_id'>Toy Order to Update: </label>
     <select name='update_toyorder_id' id='update_toyorder_id' required>
         <option value='' disabled selected>Select a Toy Order</option>
         {{#each toyorders}}
-        <option value='{{this.toyOrderID}}' required>
+        <option value='{{this.toyOrderID}}'
+            data-orderid='{{this.orderID}}'
+            data-toyid='{{this.toyID}}'>
             {{this.toyOrderID}}
         </option>
         {{/each}}
     </select>
 
+    <label for='update_order_id'>Order to Update: </label>
+    <span id="current_order_id_text"></span>
+    <input type="hidden" name="update_order_id" id="update_order_id" />
+
+    {{! dropdown menu of existing toys }}
     <label for='update_toy_toyid'>Toy: </label>
     <select name='update_toy_toyid' id='update_toy_toyid' required>
         <option value='' disabled selected>Select a toy</option>
         {{#each toys}}
         <option value='{{this.toyID}}'>
-            {{this.toyID}} 
-            - 
-            {{this.toyName}}
-        </option>
-        {{/each}}
-    </select>
-
-    <label for='update_order_id'>Order: </label>
-    <select name='update_order_id' id='update_order_id' required>
-        <option value='' disabled selected>Select an order</option>
-        {{#each orders}}
-        <option value='{{this.orderID}}'>
-            {{this.orderID}} 
+            {{this.toyID}} - {{this.toyName}}
         </option>
         {{/each}}
     </select>
 
     <input type='submit' />
 </form>
+
+{{!-- Script to dynamically modify dropdown list of orders, based on toy order selection --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toyOrderSelect = document.getElementById('update_toyorder_id');
+    const orderIdText = document.getElementById('current_order_id_text');
+    const orderIdInput = document.getElementById('update_order_id');
+    const toySelect = document.getElementById('update_toy_toyid');
+
+    toyOrderSelect.addEventListener('change', function() {
+        const selectedOption = toyOrderSelect.options[toyOrderSelect.selectedIndex];
+        const orderID = selectedOption.getAttribute('data-orderid');
+        const toyID = selectedOption.getAttribute('data-toyid');
+
+        // Display the order ID as text and set the hidden input
+        orderIdText.textContent = orderID ? orderID : '';
+        orderIdInput.value = orderID ? orderID : '';
+
+        // Set the toy dropdown to the correct toy
+        for (let i = 0; i < toySelect.options.length; i++) {
+            if (toySelect.options[i].value === toyID) {
+                toySelect.selectedIndex = i;
+                break;
+            }
+        }
+    });
+});
+</script>
 
 {{!-- No need for a ‘create ToyOrder’ form, since adding to the 
 Orders table automatically adds to the ToyOrders table one --}}
 
-{{! CREATE form }}
-<h2>Add a Toy Order</h2>
-<form class='cuForm' id='create_toyorder_form' method='POST' action='/toyorders/create'>
-	{{! dropdown menu of existing orders to add to }}
-    <label for='create_toyorder_orderID'>Order to add to: </label>
-    <select name='create_toyorder_orderID' id='create_toyorder_orderID' required>
-	    <option value='' disabled selected></option>
-            {{#each orders}}
-        <option value='{{this.orderID}}' required>
-            {{this.orderID}}
-        </option>
-        {{/each}}
-  </select>
-
-	{{! dropdown menu of existing employees’ names }}
-  <label for='create_toyorder_toyID'>Toy Name: </label>
-  <select name='create_toyorder_toyID' id='create_toyorder_toyID' required>
-        <option value='' disabled selected></option>
-            {{#each toys}}
-        <option value='{{this.toyID}}' required>
-            {{this.toyID}}
-            -
-            {{this.toyName}}
-        </option>
-        {{/each}}
-  </select>
-
-    <input type='submit' />
-</form>
