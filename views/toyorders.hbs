@@ -56,13 +56,12 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
         {{/each}}
     </select>
 
-    <label for='update_order_id'>Order to Update: </label>
+    <label for='update_toyorder_orderid'>Order to Update: </label>
     <span id="current_order_id_text"></span>
-    <input type="hidden" name="update_order_id" id="update_order_id" />
 
     {{! dropdown menu of existing toys }}
-    <label for='update_toy_toyid'>Toy: </label>
-    <select name='update_toy_toyid' id='update_toy_toyid' required>
+    <label for='update_toyorder_toyid'>Toy: </label>
+    <select name='update_toyorder_toyid' id='update_toyorder_toyid' required>
         <option value='' disabled selected>Select a toy</option>
         {{#each toys}}
         <option value='{{this.toyID}}'>
