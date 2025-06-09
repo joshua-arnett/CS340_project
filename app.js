@@ -529,7 +529,7 @@ app.post('/toyorders/update', async (req, res) => {
 
         await db.query('CALL sp_UpdateToyOrder(?, ?)', [
             data.update_toyorder_id,
-            data.update_toyorder_toyID
+            data.update_toyorder_toyid
         ]);
 
         res.redirect('/toyorders');
