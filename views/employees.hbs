@@ -5,46 +5,6 @@ Based on:
 Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948 
 --}}
 
-<h1>Employees</h1>
-
-{{! READ table }}
-<table>
-    <thead>
-        {{! For the table header row, we print the DB attribute names }}
-        <tr>
-            {{#each employees.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
-            <th></th>
-        </tr>
-    </thead>
-
-    <tbody>
-        {{! For each row, print the id, name, description, cost, and stock amount }}
-        {{#each employees}}
-        <tr>
-            <td>{{this.employeeID}}</td>
-            <td>{{this.departmentID}}</td>
-            <td>{{this.employeeName}}</td>
-            <td>{{this.employeePosition}}</td>
-
-            {{! DELETE form }}
-            <form id='delete_employee_form' method='POST' action='/employees/delete'>
-                <input type='hidden' name='delete_employee_id' value='{{this.employeeID}}' />
-                <input type='hidden' name='delete_employee_name' value='{{this.employeeName}}' />
-                <td>
-                    <button type='submit'>
-                        Delete
-                    </button>
-                </td>
-            </form>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
-
 {{! UPDATE form }}
 <h2>Update an Employee</h2>
 <form class='cuForm' id='update_employee_form' method='POST' action='/employees/update'>
@@ -102,3 +62,43 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
     <input type='submit' />
 </form>
+
+<h1>Employees</h1>
+
+{{! READ table }}
+<table>
+    <thead>
+        {{! For the table header row, we print the DB attribute names }}
+        <tr>
+            {{#each employees.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{! For each row, print the id, name, description, cost, and stock amount }}
+        {{#each employees}}
+        <tr>
+            <td>{{this.employeeID}}</td>
+            <td>{{this.departmentID}}</td>
+            <td>{{this.employeeName}}</td>
+            <td>{{this.employeePosition}}</td>
+
+            {{! DELETE form }}
+            <form id='delete_employee_form' method='POST' action='/employees/delete'>
+                <input type='hidden' name='delete_employee_id' value='{{this.employeeID}}' />
+                <input type='hidden' name='delete_employee_name' value='{{this.employeeName}}' />
+                <td>
+                    <button type='submit'>
+                        Delete
+                    </button>
+                </td>
+            </form>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

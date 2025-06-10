@@ -5,46 +5,6 @@ Based on:
 Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948 
 --}}
 
-<h1>Departments</h1>
-
-{{! READ table }}
-<table>
-    <thead>
-        {{! For the table header row, we print the DB attribute names }}
-        <tr>
-            {{#each departments.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
-            <th></th>
-        </tr>
-    </thead>
-
-    <tbody>
-        {{! For each row, print the id, name, description, cost, and stock amount }}
-        {{#each departments}}
-        <tr>
-            <td>{{this.departmentID}}</td>
-            <td>{{this.departmentName}}</td>
-            <td>{{this.departmentManager}}</td>
-            <td>{{this.departmentAddress}}</td>
-
-            {{! DELETE form }}
-            <form id='delete_department_form' method="POST" action="/departments/delete">
-                <input type='hidden' name='delete_department_id' value='{{this.departmentID}}' />
-                <input type='hidden' name='delete_department_name' value='{{this.departmentName}}' />
-                <td>
-                    <button type='submit'>
-                        Delete
-                    </button>
-                </td>
-            </form>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
-
 {{! UPDATE form }}
 <h2>Update a Department</h2>
 <form class='cuForm' id="update_department_form" method="POST" action="/departments/update">
@@ -88,3 +48,43 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
 
     <input type='submit' />
 </form>
+
+<h1>Departments</h1>
+
+{{! READ table }}
+<table>
+    <thead>
+        {{! For the table header row, we print the DB attribute names }}
+        <tr>
+            {{#each departments.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{! For each row, print the id, name, description, cost, and stock amount }}
+        {{#each departments}}
+        <tr>
+            <td>{{this.departmentID}}</td>
+            <td>{{this.departmentName}}</td>
+            <td>{{this.departmentManager}}</td>
+            <td>{{this.departmentAddress}}</td>
+
+            {{! DELETE form }}
+            <form id='delete_department_form' method="POST" action="/departments/delete">
+                <input type='hidden' name='delete_department_id' value='{{this.departmentID}}' />
+                <input type='hidden' name='delete_department_name' value='{{this.departmentName}}' />
+                <td>
+                    <button type='submit'>
+                        Delete
+                    </button>
+                </td>
+            </form>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

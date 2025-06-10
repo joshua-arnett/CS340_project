@@ -14,6 +14,39 @@ AI Source URL: www.chatgpt.com
 --}}
 
 
+{{! UPDATE form }}
+<h2>Update a Toy Order</h2>
+<form class='cuForm' id='update_toyorder_form' method="POST" action="/toyorders/update">
+    {{! dropdown menu of existing toy orders to update }}
+    <label for='update_toyorder_id'>Toy Order to Update: </label>
+    <select name='update_toyorder_id' id='update_toyorder_id' required>
+        <option value='' disabled selected>Select a Toy Order</option>
+        {{#each toyorders}}
+        <option value='{{this.toyOrderID}}'
+            data-orderid='{{this.orderID}}'
+            data-toyid='{{this.toyID}}'>
+            {{this.toyOrderID}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for='update_toyorder_orderid'>Order to Update: </label>
+    <span id="current_order_id_text"></span>
+
+    {{! dropdown menu of existing toys }}
+    <label for='update_toyorder_toyid'><div></div>  Toy: </label>
+    <select name='update_toyorder_toyid' id='update_toyorder_toyid' required>
+        <option value='' disabled selected>Select a toy</option>
+        {{#each toys}}
+        <option value='{{this.toyID}}'>
+            {{this.toyID}} - {{this.toyName}}
+        </option>
+        {{/each}}
+    </select>
+
+    <input type='submit' />
+</form>
+
 {{!-- Make join to make more user friendly --}}
 <h1>Toy Orders</h1>
 
@@ -46,38 +79,6 @@ AI Source URL: www.chatgpt.com
     </tbody>
 </table>
 
-{{! UPDATE form }}
-<h2>Update a Toy Order</h2>
-<form class='cuForm' id='update_toyorder_form' method="POST" action="/toyorders/update">
-    {{! dropdown menu of existing toy orders to update }}
-    <label for='update_toyorder_id'>Toy Order to Update: </label>
-    <select name='update_toyorder_id' id='update_toyorder_id' required>
-        <option value='' disabled selected>Select a Toy Order</option>
-        {{#each toyorders}}
-        <option value='{{this.toyOrderID}}'
-            data-orderid='{{this.orderID}}'
-            data-toyid='{{this.toyID}}'>
-            {{this.toyOrderID}}
-        </option>
-        {{/each}}
-    </select>
-
-    <label for='update_toyorder_orderid'>Order to Update: </label>
-    <span id="current_order_id_text"></span>
-
-    {{! dropdown menu of existing toys }}
-    <label for='update_toyorder_toyid'>Toy: </label>
-    <select name='update_toyorder_toyid' id='update_toyorder_toyid' required>
-        <option value='' disabled selected>Select a toy</option>
-        {{#each toys}}
-        <option value='{{this.toyID}}'>
-            {{this.toyID}} - {{this.toyName}}
-        </option>
-        {{/each}}
-    </select>
-
-    <input type='submit' />
-</form>
 
 {{!-- Script to dynamically modify dropdown list of orders, based on toy order selection --}}
 <script>
