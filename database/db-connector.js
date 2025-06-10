@@ -1,3 +1,9 @@
+// Citation for the following page:
+// Date: 05/06/2025
+// Based on:
+// Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948 
+
+
 require('dotenv').config();
 
 const DB_USER = process.env.DB_USER;

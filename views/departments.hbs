@@ -79,7 +79,7 @@ Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web
                 <input type='hidden' name='delete_department_id' value='{{this.departmentID}}' />
                 <input type='hidden' name='delete_department_name' value='{{this.departmentName}}' />
                 <td>
-                    <button type='submit'>
+                    <button type='submit' onclick="return confirm('Are you sure you want to delete this department?')">
                         Delete
                     </button>
                 </td>
